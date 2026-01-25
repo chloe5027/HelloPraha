@@ -1,15 +1,15 @@
 @font-face {
   font-family: 'NewYorker';
   font-weight: 300;
-  src: url('../font/newyorker/ACaslonPro-Regular.otf') format('opentype');
+  src: url('/font/newyorker/ACaslonPro-Regular.otf') format('opentype');
 }
 @font-face {
   font-family: 'NewYorker';
   font-weight: 400;
-  src: url('../font/newyorker/ACaslonPro-Semibold.otf') format('opentype');
+  src: url('/font/newyorker/ACaslonPro-Semibold.otf') format('opentype');
 }
 @font-face {
   font-family: 'NewYorker';
   font-weight: 500;
-  src: url('../font/newyorker/ACaslonPro-Bold.otf') format('opentype');
+  src: url('/font/newyorker/ACaslonPro-Bold.otf') format('opentype');
 }

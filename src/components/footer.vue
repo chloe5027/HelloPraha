@@ -23,7 +23,7 @@
 }
 
 .footer {
-  padding: 32px 16px;
+  padding: 32px 32px;
   display: flex;
   flex-direction: column;
   background-color: var(--main-color);
