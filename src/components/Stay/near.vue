@@ -19,7 +19,7 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
 const facilities = ref([])
-const PB_ORIGIN = 'http://localhost:8090'
+const PB_ORIGIN = ''
 
 function fileUrl(record, filename) {
   return `${PB_ORIGIN}/api/files/facilities/${record.id}/${filename}`

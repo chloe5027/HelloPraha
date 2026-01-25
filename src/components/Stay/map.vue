@@ -18,7 +18,7 @@ import axios from 'axios'
 
 const route = ref([])
 
-const PB_ORIGIN = 'http://localhost:8090'
+const PB_ORIGIN = ''
 
 function fileUrl(record, filename) {
   // /api/files/<collection>/<recordId>/<filename>
