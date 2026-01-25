@@ -33,9 +33,9 @@
 .contents {
   padding: 0;
   cursor: pointer;
-  font-weight: 300;
+  font-weight: 400;
   &:hover {
-    font-weight: 400;
+    font-weight: 500;
   }
 }
 </style>
