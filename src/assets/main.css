@@ -1,0 +1,8 @@
+@import './newyorker.css';
+@import './suit.css';
+@import './vogue.css';
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
