@@ -85,9 +85,14 @@
   padding: 32px;
   font-family: 'NewYorker';
   font-weight: 300;
-  line-height: 0.85;
-  font-size: 64px;
   background-color: var(--main-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.main-title {
+  font-size: 52px;
+  line-height: 0.85;
 }
 .main-img {
   display: flex;
