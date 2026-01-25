@@ -39,7 +39,7 @@ const reviews = ref([])
 
 // PocketBase 서버 주소 (로컬)
 // ⚠️ 나중에 EC2/도메인 붙이면 여기만 바꾸면 됨
-const PB_ORIGIN = ''
+const PB_ORIGIN = import.meta.env.VITE_PB_ORIGIN || ''
 
 function fileUrl(record, filename) {
   // /api/files/<collection>/<recordId>/<filename>

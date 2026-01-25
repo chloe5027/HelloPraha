@@ -18,7 +18,7 @@ import axios from 'axios'
 
 const route = ref([])
 
-const PB_ORIGIN = ''
+const PB_ORIGIN = import.meta.env.VITE_PB_ORIGIN || ''
 
 function fileUrl(record, filename) {
   // /api/files/<collection>/<recordId>/<filename>

@@ -9,4 +9,4 @@ import App from './App.vue'
 
 createApp(App).use(router).mount('#app')
 
-axios.defaults.baseURL = '/api'
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE

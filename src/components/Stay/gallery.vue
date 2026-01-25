@@ -15,7 +15,7 @@
   
   const images = ref([])
   
-  const PB_ORIGIN = ''
+  const PB_ORIGIN = import.meta.env.VITE_PB_ORIGIN || ''
 
   const fileUrl = (record, filename) => {
     return `${PB_ORIGIN}/api/files/gallery/${record.id}/${filename}`

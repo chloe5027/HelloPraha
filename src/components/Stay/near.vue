@@ -19,7 +19,7 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
 const facilities = ref([])
-const PB_ORIGIN = ''
+const PB_ORIGIN = import.meta.env.VITE_PB_ORIGIN || ''
 
 function fileUrl(record, filename) {
   return `${PB_ORIGIN}/api/files/facilities/${record.id}/${filename}`
