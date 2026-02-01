@@ -47,7 +47,7 @@ function fileUrl(record, filename) {
 }
 
 onMounted(async () => {
-  const res = await axios.get('/collections/review/records', {
+  const res = await axios.get('/api/collections/review/records', {
     params: {
       perPage: 10,
       sort: 'order',

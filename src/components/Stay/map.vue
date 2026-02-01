@@ -26,7 +26,7 @@ function fileUrl(record, filename) {
 }
 
 onMounted(async () => {
-  const res = await axios.get('/collections/route/records', {
+  const res = await axios.get('/api/collections/route/records', {
     params: {
       perPage: 10,
       sort: 'order',
