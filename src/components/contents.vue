@@ -2,11 +2,11 @@
   <div v-if="open" class="overlay" @click="$emit('close')" />
 
   <aside class="panel" :class="{ open }">
-    <div class: content @click="router.push('/')">Home</div>
-    <div class: content @click="router.push('/stay')">안녕 프라하</div>
-    <div class: content @click="router.push('/reviews')">안녕 프라하 추천리뷰</div>
-    <div class: content @click="router.push('/tour')">프라하의 정석</div>
-    <div class: content @click="router.push('/hellosevilla')">안녕 세비야</div>
+    <div class = "content" @click="router.push('/')">Home</div>
+    <div class = "content" @click="router.push('/stay')">안녕 프라하</div>
+    <div class = "content" @click="router.push('/reviews')">안녕 프라하 추천리뷰</div>
+    <div class = "content" @click="router.push('/tour')">프라하의 정석</div>
+    <div class = "content" @click="router.push('/hellosevilla')">안녕 세비야</div>
   </aside>
 </template>
 
@@ -31,7 +31,7 @@ const go = (path) => {
   position: fixed;
   top: 0;
   right: 0;
-  width: 280px;
+  width: 250px;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -56,8 +56,9 @@ const go = (path) => {
 }
 .content {
   cursor: pointer;
+  font-weight: 400;
   &:hover {
-    
+    font-weight: 500;
   }
 }
 </style>
