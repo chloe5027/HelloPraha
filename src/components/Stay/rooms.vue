@@ -1,6 +1,6 @@
 <template>
   <div class="title">
-    안녕 프라하 시설 소개
+    안녕 프라하 소개
   </div>
 
   <div class="room" v-for="r in rooms" :key="r.id">

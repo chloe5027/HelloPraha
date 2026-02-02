@@ -2,6 +2,9 @@
   <div class="title">
     안녕 프라하
   </div>
+  <div class="sitemap">
+
+  </div>
   <div class="menu">
     <div class="contents-bar">
       <div class="contents-title"
