@@ -11,14 +11,25 @@ const route = useRoute()
 </script> -->
 
 <template>
-  <Header />
+  <Header @toggle-contents="toggleContents"/>
+
+  <Contents :open="isContentsOpen" @close="isContentsOpen = false"/>
+
   <RouterView class="router-view" />
   <Footer />
 </template>
 
 <script setup>
-import Header from "./components/Header.vue";
-import Footer from "./components/Footer.vue";
+import { ref } from 'vue'
+import Header from "./components/header.vue";
+import Footer from "./components/footer.vue";
+import Contents from "./components/contents.vue";
+
+const isContentsOpen = ref(false)
+
+const toggleContents = () => {
+  isContentsOpen.value = !isContentsOpen.value
+}
 </script>
 
 <style scoped>

@@ -3,7 +3,7 @@
     <div class="header-title" @click="router.push('/')">
       HOME
     </div>
-    <div class="contents">
+    <div class="contents" @click="$emit('toggle-contents')">
       Contents
     </div>
   </div>
