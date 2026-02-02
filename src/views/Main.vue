@@ -90,6 +90,7 @@
   height: auto;
   display: block;
   padding: 32px 0 0 0;
+  background-color: var(--main-bg-color);
 }
 .main {
   padding: 32px 16px 16px 16px;

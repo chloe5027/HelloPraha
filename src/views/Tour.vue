@@ -12,6 +12,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  background-color: var(--main-bg-color);
 }
 .title {
   font-size: 16px;
