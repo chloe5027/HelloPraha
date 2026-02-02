@@ -5,26 +5,28 @@
     안녕 프라하 추천리뷰
   </div>
 
-  <div v-for="r in reviews" :key="r.id" class="container">
-    <div class="stars">
-      {{ '★'.repeat(r.rate || 0) }}{{ '☆'.repeat(5 - (r.rate || 0)) }}{{ r.rate }}
-    </div>
-
-    <div class="name-date">{{ r.name?.slice(0, 10)}} {{ r.date?.slice(0, 10) }}</div>
-
-    <div class="content">
-      <span class="text">{{ displayContent(r) }}</span>
-      <div v-if="isTruncated(r)" class="see-more" @click="toggleExpanded(r.id)">
-        {{ isExpanded(r.id) ? '접기':'더보기' }}
+  <div class="review">
+    <div v-for="r in reviews" :key="r.id" class="container">
+      <div class="stars">
+        {{ '★'.repeat(r.rate || 0) }}{{ '☆'.repeat(5 - (r.rate || 0)) }}{{ r.rate }}
       </div>
-    </div>
 
-    <img
-      v-if="r.img"
-      class="review-img"
-      :src="fileUrl(r, r.img)"
-      alt=""
-    />
+      <div class="name-date">{{ r.name?.slice(0, 10)}} {{ r.date?.slice(0, 10) }}</div>
+
+      <div class="content">
+        <span class="text">{{ displayContent(r) }}</span>
+        <div v-if="isTruncated(r)" class="see-more" @click="toggleExpanded(r.id)">
+          {{ isExpanded(r.id) ? '접기':'더보기' }}
+        </div>
+      </div>
+
+      <img
+        v-if="r.img"
+        class="review-img"
+        :src="fileUrl(r, r.img)"
+        alt=""
+      />
+    </div>
   </div>
 
 </template>
@@ -49,7 +51,7 @@
   }
   
   onMounted(async () => {
-    const res = await axios.get('/collections/review/records', {
+    const res = await axios.get('/api/collections/review/records', {
       params: {
         perPage: 10,
       },
@@ -86,9 +88,14 @@
   font-weight: 500;
   padding: 32px 32px 8px 32px;
 }
+.review {
+  padding: 8px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 .container {
   font-size: 12px;
   font-weight: 400px;
-  padding: 0px 32px 16px 32px;
 }
 </style>
