@@ -65,6 +65,8 @@
         </div>
       </div>
     </div>
+    <hr class="line"/>
+
   </div>
 
 </template>
@@ -161,9 +163,10 @@
   }
 }
 .line {
-  background-color: var(--main-text-color);
-  color: var(--main-text-color);
+  background-color: var(--main-color);
+  color: var(--main-color);
   width: 100%;
+  border-width: 1px 0 0 0;
 }
 
 </style>
