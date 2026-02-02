@@ -10,8 +10,10 @@
 
         <div class="content">
           <span class="text">{{ displayContent(r) }}</span>
-          <div v-if="isTruncated(r)" class="see-more" @click="toggleExpanded(r.id)">
-            {{ isExpanded(r.id) ? '접기':'더보기' }}
+          <div class="see-more-container">
+            <div v-if="isTruncated(r)" class="see-more" @click="toggleExpanded(r.id)">
+              {{ isExpanded(r.id) ? '접기':'더보기' }}
+            </div>
           </div>
         </div>
 
@@ -99,9 +101,11 @@ const isTruncated = (r) => (r?.content?.length ?? 0) > LIMIT
   display: flex;
   justify-content: center;
 }
-.see-more {
+.see-more-container {
   display: flex;
   justify-content: flex-end;
+}
+.see-more {
   cursor: pointer;
   font-weight: 400;
   font-size: 12px;

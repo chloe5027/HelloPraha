@@ -19,7 +19,9 @@
     <div class="menu">
       <img class="menu-img"/>
       <div class="menu-text">
-        <div class="menu-title" @click="router.push('/stay')">안녕 프라하</div>
+        <div class="menu-title-container">
+          <div class="menu-title" @click="router.push('/stay')">안녕 프라하</div>
+        </div>
         <div class="menu-info">
           프라하에 있는 정말 멋진 숙소고요<br>
           한 번 와보세요<br>
@@ -29,15 +31,21 @@
     </div>
 
     <hr class="line"/>
-    <div class="menu-title" @click="router.push('/reviews')">안녕 프라하 추천리뷰</div>
+    <div class="menu-title-container">
+      <div class="menu-title" @click="router.push('/reviews')">안녕 프라하 추천리뷰</div>
+    </div>
     <Review/>
-    <div class="more" @click="router.push('/reviews')">더 많은 리뷰 보기</div>
+    <div class="more-container">
+      <div class="more" @click="router.push('/reviews')">더 많은 리뷰 보기</div>      
+    </div>
 
     <hr class="line"/>
     <div class="menu">
       <img class="menu-img"/>
       <div class="menu-text">
-        <div class="menu-title" @click="router.push('/tour')">프라하의 정석</div>
+        <div class="menu-title-container">
+          <div class="menu-title" @click="router.push('/tour')">프라하의 정석</div>
+        </div>
         <div class="menu-info">
           프라하에 처음 오신 당신?<br>
           사실 처음이 아니더라도 이것만 참고한다면 기깔나는 여행을 즐기실 수 있습니다.
@@ -48,7 +56,9 @@
     <div class="menu">
       <img class="menu-img"/>
       <div class="menu-text">
-        <div class="menu-title"  @click="router.push('/hellosevilla')">안녕 세비야</div>
+        <div class="menu-title-container">
+          <div class="menu-title"  @click="router.push('/hellosevilla')">안녕 세비야</div>
+        </div>
         <div class="menu-info">
           세비야에도 안녕어쩌구가 있다는 사실!!<br>
           모르셨죠?? 알고 계셨다고요? 그럼 스페인 갈 때 가보세요
@@ -123,6 +133,10 @@
   flex-direction: column;
   gap: 4px;
 }
+.menu-title-container {
+  display: flex;
+
+}
 .menu-title {
   cursor: pointer;
   &:hover {
@@ -134,10 +148,12 @@
 .menu-info {
   font-size: 12px;
 }
-.more {
-  font-size: 12px;
+.more-container {
   display: flex;
   justify-content: flex-end;
+}
+.more {
+  font-size: 12px;
   cursor: pointer;
   &:hover {
     font-weight: 500;

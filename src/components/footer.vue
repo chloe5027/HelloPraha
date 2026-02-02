@@ -8,10 +8,11 @@
 
     </div>
     <div class="footer-info">
-      사이트 관련 오류 및 문의 <br>
-      kimrahee5027@gmail.com <br><br>
       77, Londýnská 424, Vinohrady, 120 00 Praha, Czechia <br>
-      © 2026 Hello Praha. All rights reserved.
+      © 2026 Hello Praha. All rights reserved.<br><br>
+      이 사이트는 스마트폰 디스플레이에 최적화되어 있습니다<br><br>
+      사이트 관련 오류 및 문의 <br>
+      kimrahee5027@gmail.com
     </div>
 </div>
 </template>
