@@ -15,8 +15,10 @@
 
       <div class="content">
         <span class="text">{{ displayContent(r) }}</span>
-        <div v-if="isTruncated(r)" class="see-more" @click="toggleExpanded(r.id)">
-          {{ isExpanded(r.id) ? '접기':'더보기' }}
+        <div class="see-more-container">
+          <div v-if="isTruncated(r)" class="see-more" @click="toggleExpanded(r.id)">
+            {{ isExpanded(r.id) ? '접기':'더보기' }}
+          </div>
         </div>
       </div>
 
@@ -93,6 +95,22 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stars {
+  font-size: 14px;
+}
+.name-date {
+  font-size: 14px;
+}
+.see-more-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 .container {
   font-size: 12px;

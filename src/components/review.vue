@@ -89,9 +89,9 @@ const isTruncated = (r) => (r?.content?.length ?? 0) > LIMIT
   flex-direction: column;
 }
 .content {
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1;
-  padding: 8px 0;
+  padding: 8px 0 16px 0;
   text-align: center;
 }
 .stars {
@@ -103,10 +103,10 @@ const isTruncated = (r) => (r?.content?.length ?? 0) > LIMIT
   display: flex;
   justify-content: flex-end;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 12px;
   &:hover {
-    text-decoration: underline;
+    font-weight: 500;
   }
 }
 .review-img {
@@ -118,4 +118,36 @@ const isTruncated = (r) => (r?.content?.length ?? 0) > LIMIT
   display: flex;
   justify-content: center;
 }
+
+:deep(.swiper-button-prev),
+:deep(.swiper-button-next) {
+  color: var(--main-text-color);
+  width: 12px;
+  height: 12px;
+
+  top: auto !important;
+  bottom: 0px;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+:deep(.swiper-button-prev::after),
+:deep(.swiper-button-next::after) {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+:deep(.swiper-button-prev) {
+  left: 0%;
+}
+:deep(.swiper-button-next) {
+  right: 0%;
+}
+
+:deep(.swiper-button-prev:hover),
+:deep(.swiper-button-next:hover) {
+  color: var(--main-text-color);
+  opacity: 1;
+}
+
 </style>

@@ -82,17 +82,18 @@
   padding: 32px 0 0 0;
 }
 .main {
-  padding: 32px;
+  padding: 32px 16px 16px 16px;
   font-family: 'NewYorker';
   font-weight: 300;
   background-color: var(--main-color);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
 }
 .main-title {
   font-size: 52px;
   line-height: 0.85;
+  margin: 0 0 0 4px;
 }
 .main-img {
   display: flex;
@@ -139,7 +140,6 @@
   justify-content: flex-end;
   cursor: pointer;
   &:hover {
-    text-decoration: underline;
     font-weight: 500;
   }
 }
