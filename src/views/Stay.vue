@@ -226,12 +226,32 @@ const roomCards = computed(() => {
     }))
   }
 
-  return [{
-    id: 'consultation',
-    name: '예약 가능 객실 확인',
-    description: '여행 일정과 인원을 남겨주시면 가장 알맞은 객실과 요금을 안내해 드립니다.',
-    image: '',
-  }]
+  return [
+    {
+      id: 'couple-room',
+      name: '안락한 커플룸',
+      description: '더블베드 · 공용욕실',
+      image: '',
+    },
+    {
+      id: 'female-dormitory',
+      name: '여자 도미토리',
+      description: '4인 또는 6인 랜덤 배정 · 여성 전용',
+      image: '',
+    },
+    {
+      id: 'family-room-1',
+      name: '가족실 1',
+      description: '최소 3인 · 최대 4인 · 공용욕실',
+      image: '',
+    },
+    {
+      id: 'family-room-2',
+      name: '가족실 2',
+      description: '최소 4인 · 최대 6인 · 공용욕실',
+      image: '',
+    },
+  ]
 })
 const nights = computed(() => {
   if (!checkIn.value || !checkOut.value) return 0
