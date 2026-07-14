@@ -110,3 +110,15 @@ git push -u origin feature/브랜치이름
 2. 갤러리, 숙소 요약, 고정 탭, 시설·혜택, 객실 카드 순서로 UI를 구현합니다.
 3. 모바일과 데스크톱 화면을 모두 확인합니다.
 4. 예약 기능은 UI 확정 후 PocketBase 컬렉션과 서버 검증 로직을 설계합니다.
+
+## 예약 문의 1차 테스트 상태
+
+- `/stay` 예약 패널에 체크인, 체크아웃, 인원, 객실, 예약자명, 연락처, 요청사항 입력을 추가했습니다.
+- 로컬 개발 서버에서는 예약 문의를 `localStorage`의 `hellopraha:reservations` 키에 저장합니다.
+- 저장 후 예약번호를 만들고, 카카오톡 문의용 문구를 복사한 뒤 카카오톡 채널을 엽니다.
+- 현재 운영 PocketBase에는 `reservations` 컬렉션이 없으므로 운영 저장은 아직 연결하지 않았습니다.
+- 다음 단계에서는 `reservations` 컬렉션을 만들고, 서버 검증과 관리자 예약 목록을 추가해야 합니다.
+
+권장 `reservations` 필드:
+
+`reservation_no`, `room`, `check_in`, `check_out`, `nights`, `guests`, `guest_name`, `contact`, `request`, `status`

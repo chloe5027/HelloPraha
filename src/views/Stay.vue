@@ -170,17 +170,47 @@
             <option v-for="count in 8" :key="count" :value="count">성인 {{ count }}명</option>
           </select>
         </label>
+        <label>
+          예약자명
+          <input v-model.trim="guestName" type="text" placeholder="예약자 이름" autocomplete="name" />
+        </label>
+        <label>
+          연락처 또는 카카오톡 아이디
+          <input v-model.trim="contact" type="text" placeholder="연락 가능한 정보" autocomplete="tel" />
+        </label>
+        <label>
+          요청사항
+          <textarea v-model.trim="request" rows="3" placeholder="추가 요청사항이 있으면 입력해 주세요."></textarea>
+        </label>
         <p v-if="nights" class="booking-note">{{ nights }}박 · 성인 {{ guests }}명</p>
         <p v-if="selectedRoom" class="booking-note selected-room">선택 객실: {{ selectedRoom.name }}</p>
-        <a class="primary-action" :href="kakaoLink" target="_blank" rel="noreferrer">카카오톡으로 예약 문의</a>
+        <p v-if="formError" class="form-error" role="alert">{{ formError }}</p>
+        <button class="primary-action" type="button" :disabled="isSubmitting" @click="submitReservation">
+          {{ isSubmitting ? '예약 문의 저장 중...' : '예약 문의 저장하고 카카오톡 열기' }}
+        </button>
         <button class="secondary-action" type="button" @click="scrollToSection('rooms')">객실 먼저 보기</button>
-        <p class="panel-footnote">예약 확정 전 객실 가능 여부와 이용 조건을 안내드립니다.</p>
+        <p class="panel-footnote">예약 문의를 저장한 뒤 카카오톡에서 담당자에게 확인을 요청합니다.</p>
       </aside>
     </main>
 
     <div class="mobile-booking-bar">
       <div><strong>직접예약 문의</strong><span>객실 가능 여부를 빠르게 확인하세요</span></div>
-      <a :href="kakaoLink" target="_blank" rel="noreferrer">예약하기</a>
+      <button type="button" @click="goToBooking">예약하기</button>
+    </div>
+
+    <div v-if="reservationResult" class="reservation-modal" role="dialog" aria-modal="true" aria-labelledby="reservation-result-title">
+      <div class="reservation-modal-card">
+        <button class="modal-close" type="button" aria-label="예약 결과 닫기" @click="reservationResult = null">닫기</button>
+        <p class="eyebrow">RESERVATION SAVED</p>
+        <h2 id="reservation-result-title">예약 문의가 저장되었습니다</h2>
+        <p>예약번호 <strong>{{ reservationResult.reservationNo }}</strong></p>
+        <p class="modal-instruction">아래 내용을 카카오톡 채팅창에 붙여넣어 담당자에게 확인을 요청해 주세요.</p>
+        <pre>{{ reservationResult.message }}</pre>
+        <div class="modal-actions">
+          <button class="primary-action" type="button" @click="copyReservationMessage">문의 내용 다시 복사</button>
+          <a class="secondary-action" :href="kakaoLink" target="_blank" rel="noreferrer">카카오톡 열기</a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -214,6 +244,14 @@ const selectedRoom = ref(null)
 const checkIn = ref('')
 const checkOut = ref('')
 const guests = ref(2)
+const guestName = ref('')
+const contact = ref('')
+const request = ref('')
+const formError = ref('')
+const isSubmitting = ref(false)
+const reservationResult = ref(null)
+const isLocalTest = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+const reservationStorageKey = 'hellopraha:reservations'
 
 const activeImage = computed(() => heroImages.value[activeImageIndex.value] || heroImages.value[0])
 const roomCards = computed(() => {
@@ -258,6 +296,14 @@ const nights = computed(() => {
   const difference = new Date(checkOut.value) - new Date(checkIn.value)
   return difference > 0 ? Math.round(difference / 86400000) : 0
 })
+const canSubmit = computed(() => Boolean(
+  selectedRoom.value &&
+  checkIn.value &&
+  checkOut.value &&
+  nights.value > 0 &&
+  guestName.value &&
+  contact.value,
+))
 
 function fileUrl(collection, record, filename) {
   return `${apiOrigin}/api/files/${collection}/${record.id}/${filename}`
@@ -271,6 +317,102 @@ function scrollToSection(id) {
 function selectRoom(room) {
   selectedRoom.value = room
   document.querySelector('.booking-panel')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
+function goToBooking() {
+  document.querySelector('.booking-panel')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
+function createReservationNo() {
+  const date = new Date().toISOString().slice(0, 10).replaceAll('-', '')
+  const suffix = Math.random().toString(36).slice(2, 6).toUpperCase()
+  return `HP-${date}-${suffix}`
+}
+
+function reservationMessage(reservation) {
+  return `[예약 문의]\n\n예약번호: ${reservation.reservationNo}\n객실: ${reservation.roomName}\n체크인: ${reservation.checkIn}\n체크아웃: ${reservation.checkOut}\n숙박: ${reservation.nights}박\n인원: 성인 ${reservation.guests}명\n예약자: ${reservation.guestName}\n연락처/카카오톡: ${reservation.contact}\n요청사항: ${reservation.request || '없음'}\n\n예약 가능 여부와 금액을 확인 부탁드립니다.`
+}
+
+function saveLocalReservation(reservation) {
+  const current = JSON.parse(localStorage.getItem(reservationStorageKey) || '[]')
+  current.unshift(reservation)
+  localStorage.setItem(reservationStorageKey, JSON.stringify(current))
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text)
+  } catch {
+    window.prompt('아래 예약 문의 내용을 복사해 주세요.', text)
+  }
+}
+
+async function submitReservation() {
+  formError.value = ''
+  if (!selectedRoom.value) {
+    formError.value = '먼저 문의할 객실을 선택해 주세요.'
+    goToBooking()
+    return
+  }
+  if (!checkIn.value || !checkOut.value || nights.value <= 0) {
+    formError.value = '체크인과 체크아웃 날짜를 올바르게 선택해 주세요.'
+    return
+  }
+  if (!guestName.value || !contact.value) {
+    formError.value = '예약자명과 연락처 또는 카카오톡 아이디를 입력해 주세요.'
+    return
+  }
+
+  isSubmitting.value = true
+  const reservation = {
+    reservationNo: createReservationNo(),
+    roomId: selectedRoom.value.id,
+    roomName: selectedRoom.value.name,
+    checkIn: checkIn.value,
+    checkOut: checkOut.value,
+    nights: nights.value,
+    guests: guests.value,
+    guestName: guestName.value,
+    contact: contact.value,
+    request: request.value,
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+  }
+
+  try {
+    if (isLocalTest) {
+      saveLocalReservation(reservation)
+    } else {
+      await axios.post(`${apiOrigin}/api/collections/reservations/records`, {
+        reservation_no: reservation.reservationNo,
+        room: reservation.roomName,
+        check_in: reservation.checkIn,
+        check_out: reservation.checkOut,
+        nights: reservation.nights,
+        guests: reservation.guests,
+        guest_name: reservation.guestName,
+        contact: reservation.contact,
+        request: reservation.request,
+        status: reservation.status,
+      })
+    }
+
+    const message = reservationMessage(reservation)
+    await copyText(message)
+    reservationResult.value = { reservationNo: reservation.reservationNo, message }
+    window.open(kakaoLink, '_blank', 'noopener,noreferrer')
+  } catch (error) {
+    console.error('Reservation could not be saved.', error)
+    formError.value = isLocalTest
+      ? '로컬 예약 저장에 실패했습니다. 브라우저 저장공간을 확인해 주세요.'
+      : '예약 저장에 실패했습니다. 잠시 후 다시 시도해 주세요.'
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+async function copyReservationMessage() {
+  if (reservationResult.value?.message) await copyText(reservationResult.value.message)
 }
 
 async function copyPageLink() {
@@ -503,26 +645,38 @@ details p { margin: 14px 0 0; max-width: 760px; }
 .booking-panel { align-self: start; border: 1px solid #d8ded9; display: grid; gap: 16px; padding: 24px; position: sticky; top: 88px; }
 .booking-panel h2 { font-size: 24px; margin-bottom: 4px; }
 .booking-panel label { color: #4f5b56; display: grid; font-size: 13px; font-weight: 700; gap: 8px; }
-.booking-panel input, .booking-panel select { background: #fff; border: 1px solid #c9d0cb; border-radius: 0; color: #17201f; font: inherit; padding: 12px; width: 100%; }
+.booking-panel input, .booking-panel select, .booking-panel textarea { background: #fff; border: 1px solid #c9d0cb; border-radius: 0; color: #17201f; font: inherit; padding: 12px; width: 100%; }
+.booking-panel textarea { min-height: 80px; resize: vertical; }
 .booking-note { background: #f3f6f3; color: #314039; font-size: 13px; margin: 0; padding: 12px; }
 .selected-room { border-left: 3px solid #ef5a35; }
-.primary-action { background: #17201f; color: #fff; font-size: 15px; font-weight: 700; padding: 15px; text-align: center; text-decoration: none; }
+.primary-action { background: #17201f; border: 0; color: #fff; cursor: pointer; font: inherit; font-size: 15px; font-weight: 700; padding: 15px; text-align: center; text-decoration: none; }
 .primary-action:hover { background: #314039; }
+.primary-action:disabled { cursor: wait; opacity: .65; }
 .secondary-action { width: 100%; }
+.form-error { background: #fff1ed; color: #b33f27; font-size: 13px; margin: 0; padding: 12px; }
 .panel-footnote { color: #66716c; font-size: 12px; line-height: 1.6; margin: 0; }
 
 .mobile-booking-bar { align-items: center; background: #fff; border-top: 1px solid #d8ded9; bottom: 0; display: none; gap: 12px; justify-content: space-between; left: 0; padding: 12px 16px; position: fixed; right: 0; z-index: 12; }
 .mobile-booking-bar div { display: grid; gap: 3px; }
 .mobile-booking-bar strong { font-size: 14px; }
 .mobile-booking-bar span { color: #66716c; font-size: 11px; }
-.mobile-booking-bar a { background: #17201f; color: #fff; font-size: 14px; font-weight: 700; padding: 12px 18px; text-decoration: none; }
+.mobile-booking-bar button { background: #17201f; border: 0; color: #fff; cursor: pointer; font: inherit; font-size: 14px; font-weight: 700; padding: 12px 18px; }
+
+.reservation-modal { align-items: center; background: rgba(23, 32, 31, .58); display: flex; inset: 0; justify-content: center; padding: 20px; position: fixed; z-index: 30; }
+.reservation-modal-card { background: #fff; max-height: min(760px, 90vh); max-width: 560px; overflow: auto; padding: 32px; position: relative; width: 100%; }
+.reservation-modal-card h2 { margin: 0 0 12px; }
+.reservation-modal-card pre { background: #f3f6f3; font: inherit; line-height: 1.6; margin: 18px 0; overflow: auto; padding: 16px; white-space: pre-wrap; }
+.modal-close { background: transparent; border: 0; color: #66716c; cursor: pointer; padding: 4px; position: absolute; right: 24px; top: 24px; }
+.modal-instruction { color: #4f5b56; line-height: 1.6; }
+.modal-actions { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
+.modal-actions .secondary-action { align-items: center; background: #e8eeea; color: #17201f; display: flex; justify-content: center; padding: 15px; text-decoration: none; }
 
 @media (max-width: 820px) {
   .hero { padding: 0; }
   .hero-image-wrap { aspect-ratio: 4 / 3; }
   .hero-thumbnails { margin: 0; padding: 8px 16px; }
   .stay-layout { display: block; padding-top: 36px; }
-  .booking-panel { display: none; }
+  .booking-panel { margin: 24px 16px 0; position: static; }
   .mobile-booking-bar { display: flex; }
   .detail-tabs { margin-left: -16px; margin-right: -16px; padding: 0 16px; }
   .benefit-grid { grid-template-columns: 1fr; }
@@ -532,6 +686,7 @@ details p { margin: 14px 0 0; max-width: 760px; }
   .review-grid { grid-template-columns: 1fr; }
   .location-grid { grid-template-columns: 1fr; }
   .location-grid a { align-self: start; }
+  .modal-actions { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {
