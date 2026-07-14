@@ -285,7 +285,7 @@ onMounted(async () => {
   try {
     const [galleryResponse, roomResponse, reviewResponse] = await Promise.all([
       axios.get(`${apiOrigin}/api/collections/gallery/records`, { params: { filter: '(show=true)', sort: 'order', perPage: 12 } }),
-      axios.get(`${apiOrigin}/api/collections/rooms/records`, { params: { perPage: 12 } }),
+      axios.get(`${apiOrigin}/api/collections/rooms/records`, { params: { perPage: 12, sort: 'order' } }),
       axios.get(`${apiOrigin}/api/collections/review/records`, { params: { sort: '-created', perPage: 3 } }),
     ])
 
