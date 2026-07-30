@@ -45,16 +45,18 @@
   
   // PocketBase 서버 주소 (로컬)
   // ⚠️ 나중에 EC2/도메인 붙이면 여기만 바꾸면 됨
-  const PB_ORIGIN = import.meta.env.VITE_PB_ORIGIN || ''
-  
+const PB_ORIGIN =
+  import.meta.env.VITE_PB_ORIGIN || 'https://api.hellopraha.com'  
   function fileUrl(record, filename) {
     // /api/files/<collection>/<recordId>/<filename>
     return `${PB_ORIGIN}/api/files/review/${record.id}/${filename}`
   }
   
   onMounted(async () => {
-    const res = await axios.get('/api/collections/review/records', {
-      params: {
+const res = await axios.get(
+  `${PB_ORIGIN}/api/collections/review/records`,
+  {
+    params: {
         perPage: 10,
       },
     })
